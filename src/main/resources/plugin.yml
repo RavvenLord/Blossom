@@ -1,0 +1,8 @@
+name: Blossom
+author: RavvenLord
+main: com.ravvenlord.blossom.Blossom
+version: 1.0.0
+commands:
+  setname:
+    description: 'Sets the player name to the provided arguments'
+    permission: 'blossom.set'
