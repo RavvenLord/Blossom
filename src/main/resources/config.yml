@@ -1,3 +1,5 @@
 prefix: '&9[&bBlossom&9]'
 join-message: '%s joined'
 leave-message: '%s left'
+opening-bracket: ' ('
+closing-bracket: ') '

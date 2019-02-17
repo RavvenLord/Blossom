@@ -13,4 +13,8 @@ public interface BlossomConfig {
     String getJoinMessage(String fullName);
 
     String getLeaveMessage(String fullName);
+
+    String getOpeningPlayerBracket();
+
+    String getClosingPlayerBracket();
 }

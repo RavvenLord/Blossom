@@ -9,7 +9,9 @@ public class SimpleBlossomConfigBuilder {
         return new SimpleBlossomConfig(
                 translate(configuration.getString("prefix")),
                 translate(configuration.getString("join-message", "%s joined the game")),
-                translate(configuration.getString("leave-message", "%s has left the game")));
+                translate(configuration.getString("leave-message", "%s has left the game")),
+                configuration.getString("opening-bracket", " ["),
+                configuration.getString("closing-bracket", "] "));
     }
 
     private String translate(String s) {

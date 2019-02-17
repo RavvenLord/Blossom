@@ -46,7 +46,8 @@ public class Blossom extends JavaPlugin {
         this.playerDataDao = new JsonPlayerDataDao(playerDataFolder, new GsonBuilder().setPrettyPrinting().create());
         this.playerDataContainer = new MapPlayerDataContainer();
         this.scoreboardManager = new BlossomScoreboardManager(getServer().getScoreboardManager().getMainScoreboard()
-                , uuid -> Optional.ofNullable(getServer().getPlayer(uuid)).map(HumanEntity::getName).orElse(null));
+                , uuid -> Optional.ofNullable(getServer().getPlayer(uuid)).map(HumanEntity::getName).orElse(null)
+                , this.config);
 
         getLogger().info("Loading currently online players");
         getServer().getOnlinePlayers().forEach(player -> {

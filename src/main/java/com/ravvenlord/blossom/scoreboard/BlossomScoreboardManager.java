@@ -1,5 +1,6 @@
 package com.ravvenlord.blossom.scoreboard;
 
+import com.ravvenlord.blossom.config.BlossomConfig;
 import com.ravvenlord.blossom.data.PlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -13,10 +14,12 @@ public class BlossomScoreboardManager {
 
     private Scoreboard scoreboard;
     private Function<UUID, String> nameLookup;
+    private BlossomConfig config;
 
-    public BlossomScoreboardManager(Scoreboard scoreboard, Function<UUID, String> nameLookup) {
+    public BlossomScoreboardManager(Scoreboard scoreboard, Function<UUID, String> nameLookup, BlossomConfig config) {
         this.scoreboard = scoreboard;
         this.nameLookup = nameLookup;
+        this.config = config;
     }
 
     public void updateTeam(UUID playerUUID, PlayerData playerData) {
@@ -26,8 +29,8 @@ public class BlossomScoreboardManager {
         Team playerTeam = Optional.ofNullable(this.scoreboard.getTeam(teamName))
                 .orElseGet(() -> this.scoreboard.registerNewTeam(teamName));
 
-        playerTeam.setPrefix(playerData.getFirstName() + " [");
-        playerTeam.setSuffix("] " + playerData.getLastName());
+        playerTeam.setPrefix(playerData.getFirstName() + config.getOpeningPlayerBracket());
+        playerTeam.setSuffix(config.getClosingPlayerBracket() + playerData.getLastName());
         playerTeam.setColor(playerData.getNameColor());
         playerTeam.setDisplayName(playerName);
         playerTeam.addEntry(playerName);
