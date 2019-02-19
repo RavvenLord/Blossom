@@ -37,7 +37,7 @@ public class PlayerConnectionListener implements Listener {
 
             this.container.pushPlayerData(uuid, d);
             this.scoreboardManager.updateTeam(uuid, d);
-            this.scoreboardManager.preparePlayer(event.getPlayer());
+            this.scoreboardManager.sendScoreboard(event.getPlayer());
 
             event.getPlayer().setDisplayName(d.getFullColouredName());
             event.setJoinMessage(this.config.getJoinMessage(d.getFullColouredName()));

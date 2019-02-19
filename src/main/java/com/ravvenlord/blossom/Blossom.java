@@ -11,6 +11,7 @@ import com.ravvenlord.blossom.data.PlayerDataContainer;
 import com.ravvenlord.blossom.data.PlayerDataDao;
 import com.ravvenlord.blossom.listener.PlayerConnectionListener;
 import com.ravvenlord.blossom.scoreboard.BlossomScoreboardManager;
+import com.ravvenlord.blossom.scoreboard.SpigotBlossomScoreboardManager;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -40,12 +41,14 @@ public class Blossom extends JavaPlugin {
             }
         }
 
-        this.saveDefaultConfig();
+        this.saveResource("config.yml", false);
+        this.saveResource("valueStore.yml", false);
+
         this.config = new SimpleBlossomConfigBuilder().build(this.getConfig());
 
         this.playerDataDao = new JsonPlayerDataDao(playerDataFolder, new GsonBuilder().setPrettyPrinting().create());
         this.playerDataContainer = new MapPlayerDataContainer();
-        this.scoreboardManager = new BlossomScoreboardManager(getServer().getScoreboardManager().getMainScoreboard()
+        this.scoreboardManager = new SpigotBlossomScoreboardManager(getServer().getScoreboardManager().getMainScoreboard()
                 , uuid -> Optional.ofNullable(getServer().getPlayer(uuid)).map(HumanEntity::getName).orElse(null)
                 , this.config);
 
@@ -57,7 +60,7 @@ public class Blossom extends JavaPlugin {
                         this.scoreboardManager.updateTeam(player.getUniqueId(), d);
                     });
 
-            this.scoreboardManager.preparePlayer(player);
+            this.scoreboardManager.sendScoreboard(player);
         });
 
         getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this.playerDataDao, this.playerDataContainer, this.scoreboardManager, config), this);

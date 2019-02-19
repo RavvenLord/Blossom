@@ -1,47 +1,32 @@
 package com.ravvenlord.blossom.scoreboard;
 
-import com.ravvenlord.blossom.config.BlossomConfig;
 import com.ravvenlord.blossom.data.PlayerData;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
 
-public class BlossomScoreboardManager {
+/**
+ * The {@link BlossomScoreboardManager} interfaces defines a scoreboard manager that can update the player scorebpard
+ */
+public interface BlossomScoreboardManager {
+    /**
+     * Updates the team of the player to meet the required player data
+     *
+     * @param playerUUID the uuid of the player
+     * @param playerData the {@link PlayerData} instance with the values to update against
+     */
+    void updateTeam(UUID playerUUID, PlayerData playerData);
 
-    private Scoreboard scoreboard;
-    private Function<UUID, String> nameLookup;
-    private BlossomConfig config;
+    /**
+     * Remove removes the given uuid from the scoreboard manager
+     *
+     * @param uuid the uuid to remove
+     */
+    void remove(UUID uuid);
 
-    public BlossomScoreboardManager(Scoreboard scoreboard, Function<UUID, String> nameLookup, BlossomConfig config) {
-        this.scoreboard = scoreboard;
-        this.nameLookup = nameLookup;
-        this.config = config;
-    }
-
-    public void updateTeam(UUID playerUUID, PlayerData playerData) {
-        String teamName = playerUUID.toString().replaceAll("-", "").substring(0, 15);
-        String playerName = nameLookup.apply(playerUUID);
-
-        Team playerTeam = Optional.ofNullable(this.scoreboard.getTeam(teamName))
-                .orElseGet(() -> this.scoreboard.registerNewTeam(teamName));
-
-        playerTeam.setPrefix(playerData.getFirstName() + config.getOpeningPlayerBracket());
-        playerTeam.setSuffix(config.getClosingPlayerBracket() + playerData.getLastName());
-        playerTeam.setColor(playerData.getNameColor());
-        playerTeam.setDisplayName(playerName);
-        playerTeam.addEntry(playerName);
-    }
-
-    public void remove(UUID uuid) {
-        String teamName = uuid.toString().replaceAll("-", "").substring(0, 15);
-        Optional.ofNullable(this.scoreboard.getTeam(teamName)).ifPresent(Team::unregister);
-    }
-
-    public void preparePlayer(Player player) {
-        player.setScoreboard(this.scoreboard);
-    }
+    /**
+     * Prepares the player by assigning the managed scoreboard to the player
+     * @param player the player to send the scoreboard to
+     */
+    void sendScoreboard(Player player);
 }
